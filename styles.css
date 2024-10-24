@@ -286,3 +286,51 @@ input[type="range"]::-webkit-slider-thumb:hover {
     padding: 8px 16px;
     border-radius: 4px;
 }
+
+.source-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 8px;
+    margin: 8px auto 0;
+    font-size: 13px;
+    color: #888;
+}
+
+.source-links a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.source-links a:hover {
+    color: #1677ff;
+}
+
+.github-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.github-icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.separator {
+    width: 1px;
+    height: 12px;
+    background-color: #ddd;
+}
+
+.data-source {
+    color: #888;
+}
+
+.update-time {
+    color: #999;
+    margin-left: 2px;
+    font-size: 12px;
+}

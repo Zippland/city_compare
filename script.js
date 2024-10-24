@@ -107,13 +107,15 @@ class CostCalculator {
     // 计算房屋支出
     calculateHousingCost(cityData, settings) {
         if (settings.housingType === 'rental') {
+            // 租房逻辑保持不变
             if (settings.location === 'city-center') {
                 return settings.roomType === '1b' ? cityData.rent_center_1b : cityData.rent_center_3b;
             } else {
                 return settings.roomType === '1b' ? cityData.rent_suburb_1b : cityData.rent_suburb_3b;
             }
         } else {
-            const price = settings.location === 'city-center' ? 
+            // 购房逻辑更新，使用 purchaseLocation 替代 location
+            const price = settings.purchaseLocation === 'city-center' ? 
                 cityData.house_price_center : cityData.house_price_suburb;
             return this.calculateMortgage(price * settings.houseArea, settings);
         }
@@ -135,6 +137,8 @@ class CostCalculator {
             return cityData.dining_home;
         } else if (settings.diningStyle === 'out') {
             return cityData.dining_out;
+        } else if (settings.diningStyle === 'company') {
+            return cityData.dining_out*2/7;
         } else {
             const outRatio = parseInt(settings.diningRatio) / 100;
             return cityData.dining_home * (1 - outRatio) + cityData.dining_out * outRatio;
@@ -187,14 +191,17 @@ class CostCalculator {
     calculateUtilitiesCost(cityData, settings) {
         let entertainmentCost = 0;
         switch(settings.entertainmentLevel) {
+            case 'poor': 
+                entertainmentCost = 0;
+                break;
             case 'low': 
-                entertainmentCost = cityData.cinema * 2;
+                entertainmentCost = (cityData.fitness + cityData.cinema) * 2;
                 break;
             case 'medium':
-                entertainmentCost = cityData.fitness + cityData.cinema * 2;
+                entertainmentCost = (cityData.fitness + cityData.cinema) * 4;
                 break;
             case 'high':
-                entertainmentCost = cityData.fitness + cityData.cinema * 4;
+                entertainmentCost = (cityData.fitness + cityData.cinema) * 8;
                 break;
         }
         return cityData.utilities + cityData.mobile_plan + cityData.internet + entertainmentCost;
@@ -352,6 +359,7 @@ class UIManager {
         const settings = {
             housingType: document.getElementById('housingType').value,
             location: document.getElementById('location').value,
+            purchaseLocation: document.getElementById('purchaseLocation')?.value || 'city-center', // 添加购房位置
             roomType: document.getElementById('roomType').value,
             houseArea: parseInt(document.getElementById('houseArea').value || 90),
             downPaymentRatio: document.getElementById('downPaymentRatio').value,
