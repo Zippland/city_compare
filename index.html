@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市生活成本对比计算器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator">
+        <header>
+            <h1>城市生活成本对比计算器</h1>
+            <div class="data-info">
+                <span>数据更新时间：2024年4月</span>
+            </div>
+        </header>
+
+        <div class="main-inputs">
+            <div class="input-group">
+                <label for="sourceCity">选择基准城市</label>
+                <select id="sourceCity">
+                    <!-- 城市选项将通过JavaScript动态生成 -->
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="salary">税前年收入（元）</label>
+                <input type="number" id="salary" placeholder="请输入年收入" min="0" step="1000">
+            </div>
+
+            <div class="input-group">
+                <label for="housingFundRate">公积金比例</label>
+                <select id="housingFundRate">
+                    <option value="0.05">5%（最低）</option>
+                    <option value="0.08">8%</option>
+                    <option value="0.10">10%</option>
+                    <option value="0.12">12%（最高）</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-panel">
+            <h3>生活方式设置</h3>
+            <div class="settings-grid">
+                <div class="settings-section">
+                    <h4>住房情况</h4>
+                    <div class="input-group">
+                        <label for="housingType">住房方式</label>
+                        <select id="housingType">
+                            <option value="rental">租房</option>
+                            <option value="purchase">购房</option>
+                        </select>
+                    </div>
+
+                    <div id="rentalOptions">
+                        <div class="input-group">
+                            <label for="location">区域选择</label>
+                            <select id="location">
+                                <option value="city-center">市中心</option>
+                                <option value="suburb">郊区</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="roomType">户型选择</label>
+                            <select id="roomType">
+                                <option value="1b">一居室</option>
+                                <option value="3b">三居室</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="purchaseOptions" style="display:none;">
+                        <div class="input-group">
+                            <label for="houseArea">房屋面积（平方米）</label>
+                            <input type="number" id="houseArea" value="90" min="30" max="300">
+                        </div>
+                        <div class="input-group">
+                            <label for="downPaymentRatio">首付比例</label>
+                            <select id="downPaymentRatio">
+                                <option value="0.3">30%</option>
+                                <option value="0.4">40%</option>
+                                <option value="0.5">50%</option>
+                                <option value="0.7">70%</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="mortgageYears">贷款年限</label>
+                            <select id="mortgageYears">
+                                <option value="20">20年</option>
+                                <option value="25">25年</option>
+                                <option value="30">30年</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h4>日常生活</h4>
+                    <div class="input-group">
+                        <label for="diningStyle">用餐方式</label>
+                        <select id="diningStyle">
+                            <option value="home">以在家烹饪为主</option>
+                            <option value="out">以外出用餐为主</option>
+                            <option value="mixed">混合</option>
+                        </select>
+                    </div>
+
+                    <div id="diningRatioContainer" style="display:none;">
+                        <label>在外就餐比例：<span id="diningRatioValue">50</span>%</label>
+                        <input type="range" id="diningRatio" min="0" max="100" value="50">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="transportMode">交通方式</label>
+                        <select id="transportMode">
+                            <option value="public">公共交通</option>
+                            <option value="car">私家车</option>
+                            <option value="mixed">混合</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="entertainmentLevel">娱乐消费水平</label>
+                        <select id="entertainmentLevel">
+                            <option value="low">基础</option>
+                            <option value="medium">中等</option>
+                            <option value="high">较高</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h4>家庭情况</h4>
+                    <div class="input-group">
+                        <label for="childrenCount">子女人数</label>
+                        <select id="childrenCount">
+                            <option value="0">无</option>
+                            <option value="1">1个</option>
+                            <option value="2">2个</option>
+                            <option value="3">3个</option>
+                        </select>
+                    </div>
+
+                    <div id="childEducation">
+                        <!-- 子女教育选项将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-results">
+            <h3>城市对比结果</h3>
+            <div id="cityComparisons" class="city-cards">
+                <!-- 城市对比卡片将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
