@@ -114,18 +114,44 @@ class CostCalculator {
                 return settings.roomType === '1b' ? cityData.rent_suburb_1b : cityData.rent_suburb_3b;
             }
         } else {
-            // 购房逻辑更新，使用 purchaseLocation 替代 location
+            // 购房逻辑，考虑公积金
             const price = settings.purchaseLocation === 'city-center' ? 
                 cityData.house_price_center : cityData.house_price_suburb;
-            return this.calculateMortgage(price * settings.houseArea, settings);
+            
+            // 计算月供
+            const totalPrice = price * settings.houseArea;
+            const downPayment = totalPrice * parseFloat(settings.downPaymentRatio);
+            const loanAmount = totalPrice - downPayment;
+            
+            // 计算公积金可贷额度（假设公积金最高贷款额度为120万）
+            const maxProvidentFundLoan = 1200000;
+            const providentFundLoanAmount = Math.min(loanAmount, maxProvidentFundLoan);
+            const commercialLoanAmount = loanAmount - providentFundLoanAmount;
+            
+            // 公积金贷款月供（年利率3.1%）
+            const providentFundMonthlyPayment = this.calculateMonthlyPayment(
+                providentFundLoanAmount, 
+                0.031, 
+                settings.mortgageYears
+            );
+            
+            // 商业贷款月供（年利率4.41%）
+            const commercialMonthlyPayment = this.calculateMonthlyPayment(
+                commercialLoanAmount,
+                0.0441,
+                settings.mortgageYears
+            );
+            
+            return providentFundMonthlyPayment + commercialMonthlyPayment;
         }
     }
 
     // 计算房贷月供
-    calculateMortgage(totalPrice, settings) {
-        const loanAmount = totalPrice * (1 - parseFloat(settings.downPaymentRatio));
-        const monthlyRate = 0.0441 / 12; // 4.41%年利率
-        const months = settings.mortgageYears * 12;
+    calculateMonthlyPayment(loanAmount, yearRate, years) {
+        if (loanAmount <= 0) return 0;
+        
+        const monthlyRate = yearRate / 12;
+        const months = years * 12;
         
         return loanAmount * monthlyRate * Math.pow(1 + monthlyRate, months) / 
             (Math.pow(1 + monthlyRate, months) - 1);
@@ -502,7 +528,9 @@ async function initializeApp() {
 成都,2800,19000,1200,1800,200,1200,2272.73,4346.15,1260.00,2258.33,29229.17,15489.35,2729.63,3500,4500,5500,106250.00,20.0,189.5,345.00,93.71,84.94,247.88,40.0
 广州,3000,23000,1400,2200,110,1300,3833.33,7961.54,1833.33,4833.33,72107.62,30376.90,3100.00,4000,5000,6000,111833.33,25.0,190.0,474.69,94.50,91.07,206.48,50.0
 长沙,2600,18000,1100,1600,100,1200,2300.00,3716.67,1233.33,3433.33,15036.36,39222.22,2225.00,3000,3500,4000,62000.00,20.0,145.0,285.44,49.80,97.50,466.42,40.0
-杭州,3100,24000,1300,2000,110,1300,3745.93,8054.81,2038.35,4854.13,60407.46,30427.34,2808.33,4000,5000,6000,235714.29,25.0,180.0,348.07,85.29,114.78,300.11,45.0`;
+杭州,3100,24000,1300,2000,110,1300,3745.93,8054.81,2038.35,4854.13,60407.46,30427.34,2808.33,4000,5000,6000,235714.29,25.0,180.0,348.07,85.29,114.78,300.11,45.0
+南京,3000,21000,1200,2000,200,1300,3037.50,6100.00,2175.00,3800.00,43571.43,25400.00,3749.68,4500,5500,6500,190000.00,20.0,160.0,336.88,87.89,90.00,188.10,45.0
+武汉,2800,19000,1100,1800,260,1200,2933.33,5885.71,1716.67,2583.33,27272.73,16000.00,2357.14,3500,4500,5500,63000.00,25.0,150.0,565.00,49.80,99.17,253.22,47.5`;
         
         await cityDataLoader.loadData(csvData);
         
