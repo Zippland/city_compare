@@ -1,18 +1,3 @@
-// 获取访问量
-fetch('https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fcity-compare.vercel.app&count_bg=%233DC7C8&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visits&edge_flat=false')
-.then(response => response.text())
-.then(data => {
-    // 从SVG中提取访问次数
-    const match = data.match(/visits:\s*(\d+)/);
-    if (match && match[1]) {
-        document.getElementById('hitcount').textContent = match[1];
-    }
-})
-.catch(error => {
-    console.error('获取访问量失败:', error);
-    document.getElementById('hitcount').textContent = '获取失败';
-});
-
 // 城市数据加载器
 class CityDataLoader {
     constructor() {
