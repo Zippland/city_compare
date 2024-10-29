@@ -114,14 +114,21 @@ class CostCalculator {
                 return settings.roomType === '1b' ? cityData.rent_suburb_1b : cityData.rent_suburb_3b;
             }
         } else {
-            // 购房逻辑，考虑公积金
+            // 购房逻辑，考虑公积金优先还贷
             const price = settings.purchaseLocation === 'city-center' ? 
                 cityData.house_price_center : cityData.house_price_suburb;
             
-            // 计算月供
+            // 计算房贷总额
             const totalPrice = price * settings.houseArea;
             const downPayment = totalPrice * parseFloat(settings.downPaymentRatio);
             const loanAmount = totalPrice - downPayment;
+
+            // 计算每月公积金额度
+            const monthSalary = Math.min(
+                Math.max(loanAmount / 12, cityData.social_security_base_min),
+                cityData.social_security_base_max
+            );
+            const monthlyProvidentFund = monthSalary * parseFloat(settings.housingFundRate) * 2; // 个人+单位缴存
             
             // 计算公积金可贷额度（假设公积金最高贷款额度为120万）
             const maxProvidentFundLoan = 1200000;
@@ -142,7 +149,9 @@ class CostCalculator {
                 settings.mortgageYears
             );
             
-            return providentFundMonthlyPayment + commercialMonthlyPayment;
+            // 计算实际月供支出（考虑公积金抵扣）
+            const totalMonthlyPayment = providentFundMonthlyPayment + commercialMonthlyPayment;
+            return Math.max(0, totalMonthlyPayment - monthlyProvidentFund);
         }
     }
 
@@ -257,40 +266,52 @@ class CostCalculator {
     calculateRequiredSalary(sourceCityName, targetCityName, sourceSalary, settings) {
         const sourceCityData = this.cityDataLoader.getCityData(sourceCityName);
         const targetCityData = this.cityDataLoader.getCityData(targetCityName);
-
-        // 计算源城市的收支情况
+    
+        // 1. 计算源城市的每月结余
         const sourceIncome = this.calculateMonthlyIncome(sourceSalary, sourceCityData, settings);
         const sourceCosts = this.calculateMonthlyCosts(sourceCityData, settings);
-        const sourceSavings = sourceIncome.税后工资 - sourceCosts.总支出;
-
-        // 二分查找目标工资
-        let low = sourceSalary * 0.3;  // 降低最小值以适应差异较大的城市
-        let high = sourceSalary * 3;    // 提高最大值以适应差异较大的城市
-        const tolerance = 100;  // 允许误差
-        let bestMatch = { salary: sourceSalary, diff: Infinity };
-
-        for (let i = 0; i < 20; i++) {
-            const testSalary = (low + high) / 2;
-            const targetIncome = this.calculateMonthlyIncome(testSalary, targetCityData, settings);
-            const targetCosts = this.calculateMonthlyCosts(targetCityData, settings);
-            const targetSavings = targetIncome.税后工资 - targetCosts.总支出;
-
-            const savingsDiff = targetSavings - sourceSavings;
-
-            if (Math.abs(savingsDiff) < Math.abs(bestMatch.diff)) {
-                bestMatch = { salary: testSalary, diff: savingsDiff };
+        const targetSavingsGoal = sourceIncome.税后工资 - sourceCosts.总支出;
+    
+        // 2. 计算目标城市的总支出
+        const targetCosts = this.calculateMonthlyCosts(targetCityData, settings);
+        
+        // 3. 计算目标城市需要的税后月工资
+        const targetAfterTaxMonthly = targetCosts.总支出 + targetSavingsGoal;
+        
+        // 4. 反推需要的税前年工资
+        // 从一个初始工资开始，每次增加或减少1000元进行逼近
+        let targetAnnualSalary = sourceSalary; // 从源工资开始尝试
+        let lastDiff = Infinity;
+        let step = 10000; // 初始步长
+        let direction = 0; // 0表示未确定方向，1表示增加，-1表示减少
+        
+        while (true) {
+            const monthlyIncome = this.calculateMonthlyIncome(targetAnnualSalary, targetCityData, settings);
+            const diff = monthlyIncome.税后工资 - targetAfterTaxMonthly;
+            
+            // 如果差异小于100元，认为足够接近了
+            if (Math.abs(diff) < 100) {
+                break;
             }
-
-            if (Math.abs(savingsDiff) < tolerance) break;
-
-            if (savingsDiff > 0) {
-                high = testSalary;
+            
+            // 根据差异调整工资
+            if (diff < 0) {
+                // 税后工资不够，需要增加税前工资
+                targetAnnualSalary += step;
             } else {
-                low = testSalary;
+                // 税后工资过多，需要减少税前工资
+                targetAnnualSalary -= step;
             }
+            
+            // 如果方向改变了，减小步长
+            if ((diff > 0 && lastDiff < 0) || (diff < 0 && lastDiff > 0)) {
+                step = Math.max(1000, step / 2);
+            }
+            
+            lastDiff = diff;
         }
-
-        return bestMatch.salary;
+        
+        return targetAnnualSalary;
     }
 }
 
