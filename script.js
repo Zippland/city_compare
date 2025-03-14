@@ -118,9 +118,9 @@ class CostCalculator {
             if (settings.roomType === 'shared') {
                 // 合租选项，价格为所在区域一居室价格的70%
                 if (settings.location === 'city-center') {
-                    rentCost = cityData.rent_center_1b * 0.7;
+                    rentCost = cityData.rent_center_1b * 0.6;
                 } else {
-                    rentCost = cityData.rent_suburb_1b * 0.7;
+                    rentCost = cityData.rent_suburb_1b * 0.6;
                 }
             } else if (settings.location === 'city-center') {
                 rentCost = settings.roomType === '1b' ? cityData.rent_center_1b : cityData.rent_center_3b;
