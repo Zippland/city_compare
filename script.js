@@ -112,12 +112,23 @@ class CostCalculator {
             const referenceRent = cityData.rent_suburb_3b; // 使用郊区三居室租金作为参考
             return referenceRent * 0.07; // 返回基本住房维护成本
         } else if (settings.housingType === 'rental') {
-            // 租房逻辑保持不变
-            if (settings.location === 'city-center') {
-                return settings.roomType === '1b' ? cityData.rent_center_1b : cityData.rent_center_3b;
+            // 租房逻辑
+            let rentCost = 0;
+            
+            if (settings.roomType === 'shared') {
+                // 合租选项，价格为所在区域一居室价格的一半
+                if (settings.location === 'city-center') {
+                    rentCost = cityData.rent_center_1b * 0.5;
+                } else {
+                    rentCost = cityData.rent_suburb_1b * 0.5;
+                }
+            } else if (settings.location === 'city-center') {
+                rentCost = settings.roomType === '1b' ? cityData.rent_center_1b : cityData.rent_center_3b;
             } else {
-                return settings.roomType === '1b' ? cityData.rent_suburb_1b : cityData.rent_suburb_3b;
+                rentCost = settings.roomType === '1b' ? cityData.rent_suburb_1b : cityData.rent_suburb_3b;
             }
+            
+            return rentCost;
         } else {
             // 购房逻辑，考虑公积金优先还贷
             const price = settings.purchaseLocation === 'city-center' ? 
