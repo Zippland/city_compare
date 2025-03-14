@@ -134,13 +134,24 @@ input[type="range"] {
 .city-card {
     background: white;
     border-radius: 8px;
-    padding: 20px;
     box-shadow: var(--card-shadow);
+    padding: 16px;
+    margin-bottom: 16px;
     transition: transform 0.2s ease;
 }
 
 .city-card:hover {
     transform: translateY(-2px);
+}
+
+.housing-type-indicator {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    display: inline-block;
 }
 
 .source-city {

@@ -106,7 +106,12 @@ class CostCalculator {
 
     // 计算房屋支出
     calculateHousingCost(cityData, settings) {
-        if (settings.housingType === 'rental') {
+        if (settings.housingType === 'owned') {
+            // 自有住房情况，只考虑水电物业等基本支出
+            // 按照市场租金的15%估算物业费、维修基金、家庭保险等成本
+            const referenceRent = cityData.rent_suburb_3b; // 使用郊区三居室租金作为参考
+            return referenceRent * 0.07; // 返回基本住房维护成本
+        } else if (settings.housingType === 'rental') {
             // 租房逻辑保持不变
             if (settings.location === 'city-center') {
                 return settings.roomType === '1b' ? cityData.rent_center_1b : cityData.rent_center_3b;
@@ -186,7 +191,17 @@ class CostCalculator {
             return cityData.transport_public;
         } else if (settings.transportMode === 'car') {
             return cityData.transport_car;
+        } else if (settings.transportMode === 'electric') {
+            // 电动车固定成本：充电费、维护费、折旧费（所有城市一样）
+            return 300;
+        } else if (settings.transportMode === 'bicycle') {
+            // 自行车固定成本：基本维护费（所有城市一样）
+            return 50;
+        } else if (settings.transportMode === 'walking') {
+            // 步行基本没有直接交通成本
+            return 0;
         } else {
+            // 混合模式，默认公共交通和私家车的平均值
             return (cityData.transport_public + cityData.transport_car) / 2;
         }
     }
@@ -331,9 +346,9 @@ class UIManager {
 
         // 住房选项变化
         document.getElementById('housingType').addEventListener('change', (e) => {
-            const isPurchase = e.target.value === 'purchase';
-            document.getElementById('rentalOptions').style.display = isPurchase ? 'none' : 'block';
-            document.getElementById('purchaseOptions').style.display = isPurchase ? 'block' : 'none';
+            const housingType = e.target.value;
+            document.getElementById('rentalOptions').style.display = housingType === 'rental' ? 'block' : 'none';
+            document.getElementById('purchaseOptions').style.display = housingType === 'purchase' ? 'block' : 'none';
             this.updateResults();
         });
 
