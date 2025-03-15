@@ -13,8 +13,8 @@
 # testing
 /coverage
 
-# next.js
-/.next/
+# Allow next.js build folder for Vercel
+# /.next/
 /out/
 
 # production
@@ -34,7 +34,7 @@ yarn-error.log*
 .env*
 
 # vercel
-.vercel
+# .vercel
 
 # typescript
 *.tsbuildinfo

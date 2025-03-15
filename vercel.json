@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "framework": "nextjs",
+  "buildCommand": "npm run vercel-build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" },
+    {
+      "src": "/city_data.csv",
+      "dest": "/city_data.csv",
+      "headers": {
+        "Cache-Control": "s-maxage=43200, stale-while-revalidate=3600"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/_next/$1",
+      "check": true
+    },
+    { "src": "/(.*)", "dest": "/" }
+  ],
+  "outputDirectory": ".next"
+} 
