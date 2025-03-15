@@ -52,12 +52,12 @@ const MainInputs: React.FC<MainInputsProps> = ({ settings, availableCities, onSe
   };
 
   return (
-    <div className="main-inputs grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+    <div className="main-inputs grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 p-3 md:p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
       <div className="flex flex-col">
-        <label htmlFor="sourceCity" className="font-medium text-gray-700 dark:text-gray-300 mb-1">选择基准城市</label>
+        <label htmlFor="sourceCity" className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">选择基准城市</label>
         <select 
           id="sourceCity" 
-          className="border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="border border-gray-300 dark:border-gray-600 rounded-md py-1 md:py-2 px-2 md:px-3 text-xs md:text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           value={settings.sourceCity} 
           onChange={(e) => onSettingChange('sourceCity', e.target.value)}
         >
@@ -68,21 +68,21 @@ const MainInputs: React.FC<MainInputsProps> = ({ settings, availableCities, onSe
       </div>
 
       <div className="flex flex-col">
-        <label htmlFor="salary" className="font-medium text-gray-700 dark:text-gray-300 mb-1">税前年收入（元）</label>
+        <label htmlFor="salary" className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">税前年收入（元）</label>
         <input 
           type="number" 
           id="salary" 
           placeholder="请输入年收入" 
           min="0" 
           step="1000" 
-          className="border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="border border-gray-300 dark:border-gray-600 rounded-md py-1 md:py-2 px-2 md:px-3 text-xs md:text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           value={salaryInput} 
           onChange={handleSalaryChange}
         />
       </div>
 
       <div className="flex flex-col">
-        <label htmlFor="housingFundRate" className="font-medium text-gray-700 dark:text-gray-300 mb-1">公积金比例（%）</label>
+        <label htmlFor="housingFundRate" className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">公积金比例（%）</label>
         <input
           type="number"
           id="housingFundRate"
@@ -90,7 +90,7 @@ const MainInputs: React.FC<MainInputsProps> = ({ settings, availableCities, onSe
           min="5"
           max="12"
           step="0.1"
-          className="border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="border border-gray-300 dark:border-gray-600 rounded-md py-1 md:py-2 px-2 md:px-3 text-xs md:text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           value={housingFundInput}
           onChange={handleHousingFundChange}
         />

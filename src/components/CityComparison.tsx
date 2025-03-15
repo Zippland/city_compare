@@ -24,7 +24,7 @@ const CityComparison: React.FC<CityComparisonProps> = ({
 }) => {
   const [results, setResults] = useState<CityResult[]>([]);
   const [sortBy, setSortBy] = useState<'salary' | 'ratio'>('salary');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [expandedCity, setExpandedCity] = useState<string | null>(null);
 
   useEffect(() => {
@@ -66,6 +66,12 @@ const CityComparison: React.FC<CityComparisonProps> = ({
       ? fieldA - fieldB 
       : fieldB - fieldA;
   });
+
+  // 计算最大变化率，用于进度条显示
+  const maxRatio = useMemo(() => {
+    if (results.length === 0) return 1;
+    return Math.max(...results.map(r => r.salaryRatio));
+  }, [results]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY', maximumFractionDigits: 0 }).format(value);
@@ -125,23 +131,26 @@ const CityComparison: React.FC<CityComparisonProps> = ({
   }, [expandedCity, results, getCityIncomeAndCosts]);
 
   return (
-    <div className="city-comparison p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-      <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">城市对比</h3>
+    <div className="city-comparison p-3 md:p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+      <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100 mb-3">城市对比</h3>
       
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <table className="w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm md:text-base">
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                城市
+              <th scope="col" className="px-2 md:px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <div className="flex items-center">
+                  <div className="w-5 h-5 mr-1.5"></div>
+                  <span>城市</span>
+                </div>
               </th>
               <th 
                 scope="col" 
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
+                className="px-2 md:px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
                 onClick={() => handleSort('salary')}
               >
                 <div className="flex items-center">
-                  所需年薪
+                  <span className="whitespace-nowrap">所需薪资</span>
                   {sortBy === 'salary' && (
                     <span className="ml-1">
                       {sortDirection === 'asc' ? '↑' : '↓'}
@@ -151,11 +160,11 @@ const CityComparison: React.FC<CityComparisonProps> = ({
               </th>
               <th 
                 scope="col" 
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
+                className="px-2 md:px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
                 onClick={() => handleSort('ratio')}
               >
                 <div className="flex items-center">
-                薪资变化率
+                  <span className="whitespace-nowrap">倍率</span>
                   {sortBy === 'ratio' && (
                     <span className="ml-1">
                       {sortDirection === 'asc' ? '↑' : '↓'}
@@ -163,59 +172,67 @@ const CityComparison: React.FC<CityComparisonProps> = ({
                   )}
                 </div>
               </th>
-              <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                操作
-              </th>
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {sortedResults.map((result) => (
               <React.Fragment key={result.cityName}>
-                <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                <tr 
+                  className={`hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer ${
+                    expandedCity === result.cityName ? 'bg-blue-50 dark:bg-blue-900' : ''
+                  }`}
+                  onClick={() => toggleCityDetails(result.cityName)}
+                >
+                  <td className="px-2 md:px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100 flex items-center">
+                    <div className={`flex items-center justify-center w-5 h-5 rounded-full mr-1.5 transition-all duration-200 ${
+                      expandedCity === result.cityName 
+                        ? 'bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-300' 
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                    }`}>
+                      <svg 
+                        className={`w-3 h-3 transition-transform duration-200 ${
+                          expandedCity === result.cityName ? 'rotate-180' : 'rotate-0'
+                        }`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24" 
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </div>
                     {result.cityName}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-2 md:px-4 py-3 text-xs md:text-sm text-gray-500 dark:text-gray-400">
                     {formatCurrency(result.requiredSalary)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-2 md:px-4 py-3 text-xs md:text-sm text-gray-500 dark:text-gray-400">
                     <div className="flex items-center">
                       <span className={`font-medium ${result.salaryRatio > 1 
                         ? 'text-red-600 dark:text-red-400' 
                         : 'text-green-600 dark:text-green-400'}`}>
                         {result.salaryRatio.toFixed(2)}
                       </span>
-                      <div className="ml-2 w-24 bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
+                      <div className="ml-1 md:ml-2 w-12 md:w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 md:h-2">
                         <div 
-                          className={`h-2.5 rounded-full ${result.salaryRatio > 1 
+                          className={`h-full rounded-full ${result.salaryRatio > 1 
                             ? 'bg-red-600 dark:bg-red-500' 
                             : 'bg-green-600 dark:bg-green-500'}`}
-                          style={{ width: `${Math.min(result.salaryRatio * 50, 100)}%` }}
+                          style={{ width: `${(result.salaryRatio / maxRatio) * 100}%` }}
                         ></div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                    <button 
-                      onClick={() => toggleCityDetails(result.cityName)}
-                      className={`px-3 py-1 rounded text-sm ${
-                        expandedCity === result.cityName 
-                          ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400'
-                          : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
-                      } hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors`}
-                    >
-                      {expandedCity === result.cityName ? '收起' : '详情'}
-                    </button>
-                  </td>
                 </tr>
                 {expandedCity === result.cityName && expandedCityDetails && (
                   <tr>
-                    <td colSpan={4} className="px-4 py-4 bg-gray-50 dark:bg-gray-900">
+                    <td colSpan={3} className="p-2 md:p-4 bg-gray-50 dark:bg-gray-900">
                       <div className="animate-fadeIn">
                         <IncomeExpenseDetails 
                           cityName={result.cityName}
                           income={expandedCityDetails.income}
                           costs={expandedCityDetails.costs}
+                          hideTitle={true}
                         />
                       </div>
                     </td>
@@ -227,10 +244,9 @@ const CityComparison: React.FC<CityComparisonProps> = ({
         </table>
       </div>
       
-      <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-        <p>* 薪资比例 = 目标城市所需年薪 / 基准城市年薪</p>
-        <p>* 比例大于1表示目标城市生活成本更高，小于1表示目标城市生活成本更低</p>
-        <p>* 点击&quot;详情&quot;查看该城市的收入支出详细数据</p>
+      <div className="mt-3 text-xs md:text-sm text-gray-600 dark:text-gray-400">
+        <p>* 倍率大于1表示目标城市生活成本更高，小于1表示更低</p>
+        <p>* 点击城市行可查看详细数据</p>
       </div>
       
       <style jsx>{`
