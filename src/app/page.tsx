@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Papa from 'papaparse';
 import Header from '../components/Header';
 import MainInputs from '../components/MainInputs';
 import LifestyleSettings from '../components/LifestyleSettings';
@@ -90,7 +89,7 @@ export default function Home() {
     }
   }, [costCalculator, cityDataLoader, settings]);
 
-  const handleSettingChange = (key: keyof Settings, value: any) => {
+  const handleSettingChange = (key: keyof Settings, value: unknown) => {
     setSettings(prev => ({
       ...prev,
       [key]: value

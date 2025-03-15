@@ -3,7 +3,7 @@ import { Settings } from '../utils/CostCalculator';
 
 interface LifestyleSettingsProps {
   settings: Settings;
-  onSettingChange: (key: keyof Settings, value: any) => void;
+  onSettingChange: (key: keyof Settings, value: unknown) => void;
 }
 
 const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSettingChange }) => {
@@ -31,6 +31,13 @@ const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSetti
     newTypes[index] = value;
     onSettingChange('educationTypes', newTypes);
   };
+
+  useEffect(() => {
+    // 当子女数量变为0时，清空教育阶段
+    if (settings.childrenCount === 0 && settings.educationTypes.length > 0) {
+      onSettingChange('educationTypes', []);
+    }
+  }, [settings.childrenCount, settings.educationTypes, onSettingChange]);
 
   return (
     <div className="lifestyle-settings p-5 bg-white dark:bg-gray-800 rounded-lg shadow-md">

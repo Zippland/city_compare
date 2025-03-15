@@ -4,7 +4,7 @@ import { Settings } from '../utils/CostCalculator';
 interface MainInputsProps {
   settings: Settings;
   availableCities: string[];
-  onSettingChange: (key: keyof Settings, value: any) => void;
+  onSettingChange: (key: keyof Settings, value: unknown) => void;
 }
 
 const MainInputs: React.FC<MainInputsProps> = ({ settings, availableCities, onSettingChange }) => {

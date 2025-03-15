@@ -1,6 +1,6 @@
 import React from 'react';
 import { MonthlyIncome, MonthlyCosts } from '../utils/CostCalculator';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData, ScriptableContext } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -16,22 +16,7 @@ const IncomeExpenseDetails: React.FC<IncomeExpenseDetailsProps> = ({ cityName, i
     return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY' }).format(value);
   };
 
-  // 自定义渐变色
-  const incomeGradients = [
-    ['#36a2eb', '#1a7fbd'], // 蓝色渐变 - 税后工资
-    ['#ff6384', '#e63c5e'], // 红色渐变 - 个税
-    ['#ffcd56', '#f0b400']  // 黄色渐变 - 社保公积金
-  ];
-
-  const expenseGradients = [
-    ['#ff6384', '#e63c5e'], // 红色渐变 - 住房
-    ['#36a2eb', '#1a7fbd'], // 蓝色渐变 - 餐饮
-    ['#ffcd56', '#f0b400'], // 黄色渐变 - 交通
-    ['#4bc0c0', '#2b9797'], // 青色渐变 - 教育
-    ['#9966ff', '#7a47d1']  // 紫色渐变 - 日常开销
-  ];
-
-  // 用纯色代替渐变色，解决类型问题
+  // 颜色定义 - 移除未使用的渐变色变量
   const incomeColors = ['#36a2eb', '#ff6384', '#ffcd56'];
   const expenseColors = ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0', '#9966ff'];
 
@@ -65,6 +50,7 @@ const IncomeExpenseDetails: React.FC<IncomeExpenseDetailsProps> = ({ cityName, i
     ],
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -95,6 +81,7 @@ const IncomeExpenseDetails: React.FC<IncomeExpenseDetailsProps> = ({ cityName, i
           size: 12
         },
         callbacks: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           label: function(context: any) {
             const value = context.raw;
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);

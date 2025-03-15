@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const Header: React.FC = () => {
   return (
@@ -66,10 +67,12 @@ const Header: React.FC = () => {
         {/* 访问计数 - 下一行 */}
         <div className="flex justify-center items-center mt-2 text-sm text-gray-600 dark:text-gray-400">
           <div className="visit-counter">
-            <img 
+            <Image 
               src="https://hits.sh/city-compare.vercel.app.svg?label=visitors&color=1677ff" 
               alt="访问计数" 
-              className="h-5"
+              width={100}
+              height={20}
+              unoptimized
             />
           </div>
         </div>

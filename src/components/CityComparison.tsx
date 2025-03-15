@@ -122,7 +122,7 @@ const CityComparison: React.FC<CityComparisonProps> = ({
   const expandedCityDetails = useMemo(() => {
     if (!expandedCity) return null;
     return getCityIncomeAndCosts(expandedCity);
-  }, [expandedCity, results]);
+  }, [expandedCity, results, getCityIncomeAndCosts]);
 
   return (
     <div className="city-comparison p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -230,7 +230,7 @@ const CityComparison: React.FC<CityComparisonProps> = ({
       <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
         <p>* 薪资比例 = 目标城市所需年薪 / 基准城市年薪</p>
         <p>* 比例大于1表示目标城市生活成本更高，小于1表示目标城市生活成本更低</p>
-        <p>* 点击"详情"查看该城市的收入支出详细数据</p>
+        <p>* 点击&quot;详情&quot;查看该城市的收入支出详细数据</p>
       </div>
       
       <style jsx>{`
