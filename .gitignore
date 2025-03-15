@@ -13,8 +13,8 @@
 # testing
 /coverage
 
-# Allow next.js build folder for Vercel
-# /.next/
+# next.js
+/.next/
 /out/
 
 # production
@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+Thumbs.db
+desktop.ini
 
 # debug
 npm-debug.log*
@@ -30,12 +32,37 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# local env files
+.env*.local
+.env
 
 # vercel
-# .vercel
+.vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# package managers
+package-lock.json
+yarn.lock
+npm-shrinkwrap.json
+
+# Next.js config backups
+next.config.ts
+next.config.backup.js
+
+# Temp files
+*.temp
+*.tmp
+*.swp
+*~
+
+# Example/test images
+example.jpeg
