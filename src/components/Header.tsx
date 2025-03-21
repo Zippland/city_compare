@@ -7,10 +7,10 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4">
         <h1 className="text-center">
           <div className="text-2xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform hover:scale-105 transition-transform duration-300">
-            在不同城市要过上同样的生活
+            用数据说话的 Offer 选择工具          
           </div>
-          <div className="text-3xl md:text-4xl font-black text-red-600 dark:text-red-400 mt-3 animate-pulse">
-            我<span className="text-yellow-500 dark:text-yellow-400 px-1">TM</span>到底要赚多少钱？!
+          <div className="text-xl md:text-xl font-black text-red-600 dark:text-red-400 mt-3 animate-pulse">
+            我未来的工作能让我活成什么样？相当于其他城市多少工资？
           </div>
         </h1>
         
