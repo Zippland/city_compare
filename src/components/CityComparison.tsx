@@ -132,7 +132,7 @@ const CityComparison: React.FC<CityComparisonProps> = ({
 
   return (
     <div className="city-comparison p-3 md:p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-      <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100 mb-3">城市对比</h3>
+      <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100 mb-3">同样生活条件在其他城市的所需薪资</h3>
       
       <div className="overflow-x-auto">
         <table className="w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm md:text-base">

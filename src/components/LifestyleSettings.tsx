@@ -12,6 +12,22 @@ type TabType = 'housing' | 'daily' | 'education';
 const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSettingChange }) => {
   // 添加激活标签状态
   const [activeTab, setActiveTab] = useState<TabType>('housing');
+  // 添加移动设备检测
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // 检测设备类型
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
   
   // 当子女数量变化时，调整educationTypes数组
   useEffect(() => {
@@ -48,7 +64,7 @@ const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSetti
   // 住房设置标签内容
   const renderHousingTab = () => (
     <div className="mt-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5">
+      <div className="flex flex-col space-y-3 md:space-y-4">
         <div className="flex flex-col">
           <label htmlFor="housingType" className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">住房方式</label>
           <select 
@@ -108,7 +124,7 @@ const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSetti
       {settings.housingType === 'buy' && (
         <div className="mt-3 md:mt-5 p-3 md:p-4 rounded-lg bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-200 dark:border-blue-700">
           <p className="text-xs md:text-sm text-blue-700 dark:text-blue-300 mb-2 md:mb-3 font-medium">购房贷款选项</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
+          <div className="flex flex-col space-y-3 md:space-y-4">
             <div className="flex flex-col">
               <label htmlFor="loanInterestRate" className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">贷款年利率 (%)</label>
               <div className="flex items-center">
@@ -153,7 +169,7 @@ const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSetti
   // 日常生活标签内容
   const renderDailyTab = () => (
     <div className="mt-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5">
+      <div className="flex flex-col space-y-3 md:space-y-4">
         <div className="flex flex-col">
           <label htmlFor="companyMeals" className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">公司提供餐食</label>
           <select 
@@ -258,7 +274,7 @@ const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSetti
   // 子女教育标签内容
   const renderEducationTab = () => (
     <div className="mt-4">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-5">
+      <div className="flex flex-col space-y-3 md:space-y-4">
         <div className="flex flex-col">
           <label htmlFor="childrenCount" className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">子女数量</label>
           <select 
@@ -297,7 +313,7 @@ const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSetti
         
         {/* 当没有子女时显示提示 */}
         {settings.childrenCount === 0 && (
-          <div className="col-span-3 flex items-center text-xs md:text-sm text-gray-500 dark:text-gray-400 italic">
+          <div className="flex items-center text-xs md:text-sm text-gray-500 dark:text-gray-400 italic">
             未设置子女，教育支出将为零
           </div>
         )}
@@ -309,55 +325,92 @@ const LifestyleSettings: React.FC<LifestyleSettingsProps> = ({ settings, onSetti
     <div className="lifestyle-settings p-3 md:p-5 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <h3 className="text-base md:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3 md:mb-5 pb-2 border-b border-gray-100 dark:border-gray-700">生活方式设置</h3>
       
-      {/* 标签栏 */}
-      <div className="flex border-b border-gray-200 dark:border-gray-700">
-        <button 
-          className={`py-2 px-4 text-xs md:text-sm font-medium transition-colors duration-200 border-b-2 flex items-center ${
-            activeTab === 'housing' 
-              ? 'border-blue-500 text-blue-600 dark:text-blue-400 dark:border-blue-400' 
-              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('housing')}
-        >
-          <svg className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-          </svg>
-          住房设置
-        </button>
-        
-        <button 
-          className={`py-2 px-4 text-xs md:text-sm font-medium transition-colors duration-200 border-b-2 flex items-center ${
-            activeTab === 'daily' 
-              ? 'border-blue-500 text-blue-600 dark:text-blue-400 dark:border-blue-400' 
-              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('daily')}
-        >
-          <svg className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"></path>
-          </svg>
-          日常生活
-        </button>
-        
-        <button 
-          className={`py-2 px-4 text-xs md:text-sm font-medium transition-colors duration-200 border-b-2 flex items-center ${
-            activeTab === 'education' 
-              ? 'border-blue-500 text-blue-600 dark:text-blue-400 dark:border-blue-400' 
-              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('education')}
-        >
-          <svg className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
-          </svg>
-          子女教育
-        </button>
-      </div>
-      
-      {/* 标签内容 */}
-      {activeTab === 'housing' && renderHousingTab()}
-      {activeTab === 'daily' && renderDailyTab()}
-      {activeTab === 'education' && renderEducationTab()}
+      {isMobile ? (
+        // 移动端显示标签栏
+        <>
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
+            <button 
+              className={`py-2 px-4 text-xs font-medium transition-colors duration-200 border-b-2 flex items-center ${
+                activeTab === 'housing' 
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400 dark:border-blue-400' 
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+              onClick={() => setActiveTab('housing')}
+            >
+              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+              </svg>
+              住房设置
+            </button>
+            
+            <button 
+              className={`py-2 px-4 text-xs font-medium transition-colors duration-200 border-b-2 flex items-center ${
+                activeTab === 'daily' 
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400 dark:border-blue-400' 
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+              onClick={() => setActiveTab('daily')}
+            >
+              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"></path>
+              </svg>
+              日常生活
+            </button>
+            
+            <button 
+              className={`py-2 px-4 text-xs font-medium transition-colors duration-200 border-b-2 flex items-center ${
+                activeTab === 'education' 
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400 dark:border-blue-400' 
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+              onClick={() => setActiveTab('education')}
+            >
+              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+              </svg>
+              子女教育
+            </button>
+          </div>
+          
+          {/* 移动端标签内容 */}
+          {activeTab === 'housing' && renderHousingTab()}
+          {activeTab === 'daily' && renderDailyTab()}
+          {activeTab === 'education' && renderEducationTab()}
+        </>
+      ) : (
+        // 宽屏设备显示全部内容 - 水平布局
+        <div className="grid grid-cols-3 gap-6">
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-100 dark:border-gray-700">
+            <h4 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center">
+              <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+              </svg>
+              住房设置
+            </h4>
+            {renderHousingTab()}
+          </div>
+          
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-100 dark:border-gray-700">
+            <h4 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center">
+              <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"></path>
+              </svg>
+              日常生活
+            </h4>
+            {renderDailyTab()}
+          </div>
+          
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-100 dark:border-gray-700">
+            <h4 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center">
+              <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+              </svg>
+              子女教育
+            </h4>
+            {renderEducationTab()}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

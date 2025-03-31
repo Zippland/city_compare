@@ -7,7 +7,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4">
         <h1 className="text-center">
           <div className="text-2xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform hover:scale-105 transition-transform duration-300">
-            用数据说话的 Offer 选择工具          
+            城市Offer薪资对比工具          
           </div>
           <div className="text-xl md:text-xl font-black text-red-600 dark:text-red-400 mt-3 animate-pulse">
             我未来的工作能让我活成什么样？相当于其他城市多少工资？
