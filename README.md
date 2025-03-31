@@ -72,6 +72,8 @@ npm run dev
 - 工资和税收信息 (社保基数等)
 - 教育、医疗等其他生活成本
 
+注：以上数据均可参考 [Numbeo](https://www.numbeo.com/common/)
+
 ### 2. 添加数据的步骤
 
 1. **Fork 此仓库**到你的 GitHub 账户
@@ -172,4 +174,3 @@ npm run dev
 
 - Email: zylanjian@outlook.com
 - GitHub: [@Zippland](https://github.com/Zippland)
-- 小红书: [用户主页](https://www.xiaohongshu.com/user/profile/623e8b080000000010007721)
