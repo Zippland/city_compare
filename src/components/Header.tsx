@@ -10,7 +10,7 @@ const Header: React.FC = () => {
             城市Offer薪资对比工具          
           </div>
           <div className="text-xl md:text-xl font-black text-red-600 dark:text-red-400 mt-3 animate-pulse">
-            我未来的工作能让我活成什么样？相当于其他城市多少工资？
+            在不同城市要过上同等生活水平的我到底需要多少钱？
           </div>
         </h1>
         
