@@ -6,10 +6,10 @@ const Header: React.FC = () => {
     <header className="py-8 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900">
       <div className="container mx-auto px-4">
         <h1 className="text-center">
-          <div className="text-2xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform hover:scale-105 transition-transform duration-300">
+          <div className="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform hover:scale-105 transition-transform duration-300">
             城市Offer薪资对比工具          
           </div>
-          <div className="text-xl md:text-xl font-black text-red-600 dark:text-red-400 mt-3 animate-pulse">
+          <div className="text-l md:text-l font-black text-red-500 dark:text-red-400 mt-3">
             在不同城市要过上同等生活水平的我到底需要多少钱？
           </div>
         </h1>
