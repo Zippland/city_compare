@@ -4,11 +4,11 @@
 
 对比不同城市的生活成本
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Next.js](https://img.shields.io/badge/Next.js-13.5-black)](https://nextjs.org/) [![TailwindCSS](https://img.shields.io/badge/Tailwind-3.3-38b2ac)](https://tailwindcss.com/) [![Deploy: Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black)](https://city-compare.vercel.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Next.js](https://img.shields.io/badge/Next.js-13.5-black)](https://nextjs.org/) [![TailwindCSS](https://img.shields.io/badge/Tailwind-3.3-38b2ac)](https://tailwindcss.com/) [![Deploy: Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black)](https://citycompare.zippland.com/)
 
 **在不同城市，相同生活水平需要多少薪资？Offer 选择 & 城市生活成本对比工具**
 
-[🔗 在线体验](https://citycompare.zippland.app/) | [📊 添加城市数据](#如何添加新城市数据) | [🤝 参与贡献](#参与贡献)
+[🔗 在线体验](https://citycompare.zippland.com/) | [📊 添加城市数据](#如何添加新城市数据) | [🤝 参与贡献](#参与贡献)
 
 </div>
 
@@ -40,7 +40,7 @@
 
 ### 在线使用
 
-访问 [https://city-compare.vercel.app/](https://city-compare.vercel.app/) 即可使用最新版本。
+访问 [https://citycompare.zippland.com/](https://citycompare.zippland.com/) 即可使用最新版本。
 
 ### 本地运行
 
