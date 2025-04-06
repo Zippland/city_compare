@@ -68,7 +68,7 @@ const Header: React.FC = () => {
         <div className="flex justify-center items-center mt-2 text-sm text-gray-600 dark:text-gray-400">
           <div className="visit-counter">
             <Image 
-              src="https://hits.sh/city-compare.vercel.app.svg?label=visitors&color=1677ff" 
+              src="https://hits.sh/citycompare.zippland.com.svg?label=visitors&extraCount=402601&color=9f9f9f&labelColor=007ec6" 
               alt="访问计数" 
               width={100}
               height={20}
